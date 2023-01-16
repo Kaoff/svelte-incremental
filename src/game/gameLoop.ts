@@ -18,7 +18,7 @@ const gameLoop = () => {
     deltaT = Math.max(Math.min((currentTime - lastRunTime) / 1000, 1), 0);
     lastRunTime = currentTime;
 
-    instance.data.currencies.money.add(instance.moneyPerSecond * deltaT);
+    instance.update(deltaT);
 
     game.set(instance);
 }
