@@ -1,18 +1,31 @@
+export interface GeneratorProperties {
+    id: number;
+    name: string;
+    generatePerSec: number;
+    cost: number;
+    costMult: number;
+    funFact?: string;
+}
+
 export class Generator {
     public id: number;
     public name: string;
     public bought: number = 0;
     public generated: number = 0;
     public generatePerSec: number = 0;
+    public baseCost: number;
     public cost: number;
     public costMult: number;
+    public funFact?: string;
 
-    constructor(id: number, name: string, generatePerSec: number, cost: number, costMult: number) {
+    constructor({id, name, generatePerSec, cost, costMult, funFact}: GeneratorProperties) {
         this.id = id;
         this.name = name;
         this.generatePerSec = generatePerSec;
+        this.baseCost = cost;
         this.cost = cost;
         this.costMult = costMult;
+        this.funFact = funFact;
     }
 
     public generate(deltaTime: number): number {
@@ -35,7 +48,8 @@ export class Generator {
 
     public getDescription() {
         return `
-            Makes ${this.generatePerSec} wps.
+            ${this.funFact}
+            Each makes ${this.generatePerSec} willies/s
         `;
     }
 
@@ -52,7 +66,7 @@ export class Generator {
             const totalCost = this.totalCost(amount);
 
             this.bought += amount;
-            this.cost = this.totalCost(this.bought + 1);
+            this.cost = Math.floor(this.baseCost * (Math.pow(this.costMult, this.bought)));
 
             return totalCost;
         }
